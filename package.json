@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@avail-project/nexus-core": "^0.0.1",
+    "@avail-project/nexus-widgets": "^0.0.5",
     "buffer": "^6.0.3",
     "next": "15.5.6",
     "process": "^0.11.10",
