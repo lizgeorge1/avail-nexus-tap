@@ -6,6 +6,7 @@ import InitButton from '@/components/init-button';
 import FetchUnifiedBalanceButton from '@/components/fetch-unified-balance-button';
 import DeinitButton from '@/components/de-init-button';
 import UnifiedBalanceViewer from '@/components/unified-balance-viewer';
+import BridgeWidget from '@/components/bridge-widget';
 import { isInitialized } from '@/lib/nexus';
 
 export default function Page() {
@@ -100,6 +101,11 @@ export default function Page() {
 
         {/* Enhanced Balance Viewer */}
         <UnifiedBalanceViewer balances={balances} className="mb-6" />
+
+        {/* Bridge Widget */}
+        {initialized && (
+          <BridgeWidget availableBalances={balances} className="mb-6" />
+        )}
 
         {/* Footer */}
         <div className="text-center text-sm text-gray-500">
