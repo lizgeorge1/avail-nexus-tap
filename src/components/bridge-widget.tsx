@@ -43,6 +43,7 @@ export default function BridgeWidget({ className = '', availableBalances }: Brid
       };
 
       const result = await simulateBridge(params);
+      console.log('Simulation result:', result); // Debug: see what SDK returns
       setSimulation(result);
     } catch (err: any) {
       setError(err.message || 'Failed to simulate bridge');
@@ -166,16 +167,25 @@ export default function BridgeWidget({ className = '', availableBalances }: Brid
             💡 Simulation Results
           </h3>
           <div className="space-y-2 text-sm">
+            {/* Show gas estimate */}
+            {simulation.gas && (
+              <div className="flex justify-between">
+                <span className="text-gray-400">Estimated Gas:</span>
+                <span className="text-white font-mono">{simulation.gas.toString()}</span>
+              </div>
+            )}
             {simulation.estimatedGas && (
               <div className="flex justify-between">
                 <span className="text-gray-400">Estimated Gas:</span>
                 <span className="text-white font-mono">{simulation.estimatedGas}</span>
               </div>
             )}
-            {simulation.estimatedTime && (
+
+            {/* Show cost estimate */}
+            {simulation.estimatedCost && (
               <div className="flex justify-between">
-                <span className="text-gray-400">Estimated Time:</span>
-                <span className="text-white">{simulation.estimatedTime}</span>
+                <span className="text-gray-400">Estimated Cost:</span>
+                <span className="text-white font-mono">{simulation.estimatedCost}</span>
               </div>
             )}
             {simulation.totalCost && (
@@ -184,6 +194,24 @@ export default function BridgeWidget({ className = '', availableBalances }: Brid
                 <span className="text-white font-mono">{simulation.totalCost}</span>
               </div>
             )}
+
+            {/* Show time estimate */}
+            {simulation.estimatedTime && (
+              <div className="flex justify-between">
+                <span className="text-gray-400">Estimated Time:</span>
+                <span className="text-white">{simulation.estimatedTime}</span>
+              </div>
+            )}
+
+            {/* Show source chains */}
+            {simulation.sourceChains && simulation.sourceChains.length > 0 && (
+              <div className="flex justify-between">
+                <span className="text-gray-400">Source Chain(s):</span>
+                <span className="text-white">{simulation.sourceChains.join(', ')}</span>
+              </div>
+            )}
+
+            {/* Show route if available */}
             {simulation.route && (
               <div className="mt-3 pt-3 border-t border-gray-700">
                 <p className="text-gray-400 mb-1">Route:</p>
@@ -193,6 +221,17 @@ export default function BridgeWidget({ className = '', availableBalances }: Brid
                 <p className="text-gray-400 text-xs mt-1">
                   {simulation.route.amount} {simulation.route.token}
                 </p>
+              </div>
+            )}
+
+            {/* Debug: Show raw response if nothing else is showing */}
+            {!simulation.gas && !simulation.estimatedGas && !simulation.estimatedCost &&
+             !simulation.totalCost && !simulation.estimatedTime && !simulation.sourceChains && !simulation.route && (
+              <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded">
+                <p className="text-yellow-400 text-xs mb-2">Raw SDK Response:</p>
+                <pre className="text-xs text-gray-300 overflow-auto max-h-40">
+                  {JSON.stringify(simulation, null, 2)}
+                </pre>
               </div>
             )}
           </div>
